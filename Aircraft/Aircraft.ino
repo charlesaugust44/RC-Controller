@@ -111,7 +111,7 @@ void setup() {
   radio.begin();
   radio.openWritingPipe(ac_address);
   radio.openReadingPipe(1, ct_address);
-  radio.setPALevel(RF24_PA_MIN);
+  radio.setPALevel(RF24_PA_MAX);
   radio.setAutoAck(false);
   radio.startListening();
 }
