@@ -1,3 +1,4 @@
+
 //-------------------------------------------------------------------------------------
 
 void padInit() {
@@ -95,18 +96,11 @@ void leftTriggerDownEvent() {
       refresh = true;
       break;
     case MENU_LIMIT:
+    case MENU_CURVE:
+    case MENU_MODE:
+    case MENU_STATS:
       button_tone();
       selectedOption = 0;
-      menu    = MENU_OPTIONS;
-      refresh = true;
-      break;
-    case MENU_CURVE:
-      button_tone();
-      menu    = MENU_OPTIONS;
-      refresh = true;
-      break;
-    case MENU_MODE:
-      button_tone();
       menu    = MENU_OPTIONS;
       refresh = true;
       break;
@@ -342,6 +336,10 @@ void buttonAction4Event() {
       upper   = !upper;
       refresh = true;
       break;
+    case MENU_OPTIONS:
+      menu    = MENU_STATS;
+      refresh = true;
+      break;
     case MENU_CURVE:
 
       switch (selectedOption) {
@@ -441,7 +439,7 @@ void transmitPrep() {
   rjx = map((int16_t) rjx, 0, 180, config.throwRightX, 180 - config.throwRightX);
   ljx = map((int16_t) ljx, 0, 180, config.throwLeftX,  180 - config.throwLeftX);
   rjy = map((int16_t) rjy, 0, 180, config.throwRightY, 180 - config.throwRightY);
-  
+
   transmit.aileronLeft  = rjx;
   transmit.aileronRight = rjx;
   transmit.rudder       = ljx;

@@ -36,6 +36,7 @@
 #define MENU_LIMIT    2
 #define MENU_CURVE    3
 #define MENU_MODE     4
+#define MENU_STATS    5
 
 #define CURVE_INCREMENT 0.1
 #define K_CURVE_MIN     -1.0
@@ -46,10 +47,11 @@
 #define CON_BAT_MAX     8.4
 #define CON_BAT_MIN     6.4
 #define CON_BAT_TRH     6.6
-#define AIR_BAT_MAX     12.6
+#define AIR_BAT_MAX     12.7
 #define AIR_BAT_MIN     10.5
 #define AIR_BAT_TRH     10.6
 #define CONFIG_ADDR     0x10
+#define MV_PER_DIV      14.10942956
 
 #define ADC_MAX       4095
 //#define BENCHMARK
@@ -97,7 +99,7 @@ unsigned long l1, l2, l3, l4;
 
 void setup() {
   Serial.begin(115200);
-  
+  Serial.println("Starting...");
   padInit();
   screenInit();
   radioInit();

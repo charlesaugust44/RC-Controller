@@ -34,14 +34,15 @@ typedef struct {
 } Receive_packet;
 
 typedef struct {
-  int16_t pps   = -10,
-          roll  = -10,
-          pitch = -10;
-  float lat = -10, // TODO: Testar transmissão de ponto flutuante via NRF
-        lon = -10,
-        alt = -10,
-        crs = -10,
-        spd = -10;
+  int16_t pps   = -1,
+          roll  = -1,
+          pitch = -1,
+          lat   = -1,
+          lon   = -1,
+          alt   = -1,
+          crs   = -1,
+          spd   = -1,
+          bat   = -1;
   unsigned long age;
 } Transmit_packet;
 
@@ -65,9 +66,9 @@ KalmanFilter kalmanY(0.001, 0.003, 0.03);
 bool  receiving = false,
       mpuActive = false,
       bmpActive = false;
-int16_t packets = 0;
-float   qnh     = 102700.0;
-float   altZero = 0;
+uint16_t packets = 0;
+float    qnh     = 102700.0;
+float    altZero = 0;
 
 const byte ac_address[5] = {0xAA, 0xBB, 0xCC, 0xDD, 0xDD};
 const byte ct_address[5] = {0x00, 0xBB, 0xCC, 0xDD, 0xEE};
@@ -110,7 +111,7 @@ void setup() {
   radio.begin();
   radio.openWritingPipe(ac_address);
   radio.openReadingPipe(1, ct_address);
-  radio.setPALevel(RF24_PA_MAX);
+  radio.setPALevel(RF24_PA_MIN);
   radio.setAutoAck(false);
   radio.startListening();
 }
@@ -127,8 +128,8 @@ void loop() {
   if (millis() - last_received > 800)
     reset_controls();
 
-  if (millis() - last_pps > 500) {
-    transmit.pps = (float)(packets * 1000) / (float)(millis() - last_pps);
+  if (millis() - last_pps > 500) {    
+    transmit.pps = (packets * 1000) / (millis() - last_pps);
     packets = 0;
     last_pps = millis();
   }
@@ -137,7 +138,7 @@ void loop() {
 #ifdef BENCHMARK
   l2 = millis();
 #endif
-  //gps_read();
+  transmit.bat = analogRead(A1) + 33;
 
 
 
@@ -266,7 +267,7 @@ void mpu_read() {
 }
 
 //--------------------------------------------------------------------------------------------------
-
+/*
 void gps_read() {
   if (!Serial.available())
     return;
@@ -284,4 +285,4 @@ void gps_read() {
     transmit.crs = gps.f_course();
     transmit.spd = gps.f_speed_kmph();
   }
-}
+}*/

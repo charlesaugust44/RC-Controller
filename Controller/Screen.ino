@@ -1,7 +1,7 @@
 //-------------------------------------------------------------------------------------
 
 void screenInit() {
-  display = Adafruit_SSD1306(128, 64, &Wire, -1,1190000,1190000);
+  display = Adafruit_SSD1306(128, 64, &Wire, -1, 1190000, 1190000);
 
   if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { // Allocate 1136 bytes
     while (true) {
@@ -44,6 +44,9 @@ void screenUpdate() {
       break;
     case MENU_MODE:
       drawMode();
+      break;
+    case MENU_STATS:
+      drawStats();
       break;
   }
 }

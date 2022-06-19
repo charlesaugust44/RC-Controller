@@ -1,4 +1,27 @@
 //--------------------------------------------------------------------------------------------------------
+void drawStats() {
+  if (!refresh)
+    return;
+
+  refresh = false;
+
+  display.fillScreen(SSD1306_BLACK);
+
+  display.fillRect(0, 0, 128, 11, SSD1306_WHITE);
+
+  display.setCursor(52, 2);
+  display.print("STATS");
+  display.setCursor(2, 2);
+  display.print("L1");
+  display.setCursor(4, 17);
+  display.print("CTRL VOLTAGE: ");
+  display.print(con_v);
+  display.setCursor(4, 31);
+  display.print("AIRC VOLTAGE: ");
+  display.print(received.bat * MV_PER_DIV / 1000);
+}
+
+//--------------------------------------------------------------------------------------------------------
 
 void drawMode() {
   if (!refresh)
@@ -173,20 +196,23 @@ void drawOptions() {
   display.fillScreen(SSD1306_BLACK);
 
   display.fillRect(0,  0, 128, 11, SSD1306_WHITE);
-  display.fillRect(2, 15,  10, 11, SSD1306_WHITE);
-  display.fillRect(2, 29,  10, 11, SSD1306_WHITE);
-  display.fillRect(2, 43,  10, 11, SSD1306_WHITE);
+  display.fillRect(2, 13,  10, 11, SSD1306_WHITE);
+  display.fillRect(2, 25,  10, 11, SSD1306_WHITE);
+  display.fillRect(2, 37,  10, 11, SSD1306_WHITE);
+  display.fillRect(2, 49,  10, 11, SSD1306_WHITE);
 
   display.setCursor(52, 2);
   display.print("MENU");
   display.setCursor(2, 2);
   display.print("L1");
-  display.setCursor(4, 17);
+  display.setCursor(4, 15);
   display.print("1 LIMIT");
-  display.setCursor(4, 31);
+  display.setCursor(4, 27);
   display.print("2 CURVE");
-  display.setCursor(4, 45);
+  display.setCursor(4, 39);
   display.print("3 MODE");
+  display.setCursor(4, 51);
+  display.print("4 STATS");
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -277,11 +303,11 @@ void drawHome() {
   display.fillRect(115, 29, 11, 32, SSD1306_WHITE);
 
   int c_height = mapFloat(con_v, CON_BAT_MIN, CON_BAT_MAX, 30.0, 0.0);
-  int a_height = mapFloat(received.bat / 100.0, AIR_BAT_MIN, AIR_BAT_MAX, 30.0, 0.0);
+  int a_height = mapFloat(received.bat * MV_PER_DIV / 1000, AIR_BAT_MIN, AIR_BAT_MAX, 30.0, 0.0);
 
   display.fillRect(101, 30, 9, c_height, SSD1306_BLACK);
 
-  if (pps == 0 || received.bat < 600) {
+  if (pps == 0) {
     display.setCursor(118, 40);
     display.print("X");
   } else
